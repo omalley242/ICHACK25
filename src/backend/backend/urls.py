@@ -15,12 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from Anubis.views import markdown_view
+from django.urls import path, include
+from rest_framework import routers
+from Anubis.views import markdownView, markdownRestView
+
+router = routers.DefaultRouter()
+router.register(r'allmarkdown', markdownRestView, 'mardown_rest')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
-        "markdown/", markdown_view, name="mardown"
+        "markdown/", markdownView, name="mardown"
     ),
+    path('api/', include(router.urls)),
 ]
