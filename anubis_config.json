@@ -1,0 +1,26 @@
+{
+    "anubis_enable_token": "*",
+    "anubisignore": [
+        "**venv",
+        "__pycache__",
+        "Parsing",
+        "requirements.txt",
+        "anubis_config.json",
+        "README.md",
+        "cmdline.py"
+    ],
+    "comment_patterns": {
+        "py/set": [
+            ".py",
+            {
+                "base_comment_pattern": "#",
+                "inline_comment_end": "",
+                "inline_comment_start": "",
+                "multiline_comment_end": "'''",
+                "multiline_comment_start": "'''",
+                "py/object": "__main__.CommentPattern"
+            }
+        ]
+    },
+    "py/object": "__main__.Config"
+}
