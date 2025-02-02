@@ -1,4 +1,4 @@
-# Anubis: Automatic Code Documentation for Any Language
+# Anubis 🏺: Automatic Code Documentation for Any Language
 
 Anubis is a powerful tool that automatically generates documentation for your code, regardless of the programming language. It extracts structured comments and code blocks based on custom delimiters, making it easy to document and share your projects.
 
