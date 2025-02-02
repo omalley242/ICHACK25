@@ -16,11 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
+from rest_framework.routers import SimpleRouter
 from Anubis.views import markdownView, markdownRestView
 
-router = routers.DefaultRouter()
-router.register(r'allmarkdown', markdownRestView, 'mardown_rest')
+router = SimpleRouter()
+router.register(r'markdown', markdownRestView, 'mardown_rest')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
