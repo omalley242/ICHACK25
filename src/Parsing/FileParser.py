@@ -63,7 +63,7 @@ class FileParser():
         else:
 
             #iterate over line full
-            while scanning_head_index != len(line)-1:
+            while scanning_head_index != len(line):
 
                 #check current state not within comment block
                 if self.comment_state == parsing_state.IGNORE:

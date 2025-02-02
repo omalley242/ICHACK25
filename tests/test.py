@@ -1,10 +1,13 @@
 '''|
+<<<<<<< HEAD
 
 # this is a function
 
 
+=======
+# this is a python function and code documentation generated for it!
+>>>>>>> 07fb0c4 (adding stuff)
 |'''
-
 #{
 
 # my random test function
@@ -22,9 +25,12 @@ This is a simple python class that holds a public member that can be accessed us
 A good tutorial for python classes can be seen here [Click Me](https://docs.python.org/3/tutorial/classes.html)
 
 |'''
+#{
 
 class SimpleClass():
     # This is a method to initalise member variables
     def __init__(self):
         pass
+
+#}
 
