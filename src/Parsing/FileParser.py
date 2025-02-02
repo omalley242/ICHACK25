@@ -23,7 +23,7 @@ class FileParser():
         self.markdown_state = parsing_state.IGNORE
 
     # Function to parse a supplied file
-    def parse(self, file_path: str) -> list[str]:
+    def parse(self, file_path: str) -> str:
 
         #Locate the config for this file type to enable parsing
         _, file_extension = os.path.splitext(file_path)

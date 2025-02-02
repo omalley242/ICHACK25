@@ -13,6 +13,11 @@ from Parsing.FileParser import FileParser
 from Parsing.CommentPattern import CommentPattern
 #allow for path manipulation
 import os.path
+#SQLite3 for Django interation
+import sqlite3
+#allow for running subprocesses from cmdline
+import subprocess
+
 
 
 @click.group()
@@ -54,18 +59,28 @@ def parse(configfile_path: str):
     file_parser = FileParser(config)
 
     #Process Worklist iteratively
-    extracted_text = []
-    for file in files_to_parse:
-        extracted_text += file_parser.parse(file)
+    print("Parsing Files")
+    database_records = []
+    for id, file in enumerate(files_to_parse, start=1):
+        database_records.append((id, file, file_parser.parse(file)))
 
-    print("".join(extracted_text))
+
+    print("Saving Database Records")
+    #After strings extracted add to sqlite db and serialize for use by Django
+    con = sqlite3.connect("./src/backend/db.sqlite3")
+    cur = con.cursor()
+    cur.execute("DELETE FROM Anubis_markdowncontent")
+    cur.executemany("INSERT INTO Anubis_markdowncontent VALUES(?, ?, ?)", database_records)
+    con.commit()  # Remember to commit the transaction after executing INSERT.
 
 
 #command to start the server
 @cli.command()
 def runserver():
-    print("runserver")
-
+    # run django database server
+    django_proc = subprocess.Popen(["python3", "./src/backend/manage.py", "runserver"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+    # run react front end server
+    react_proc = subprocess.Popen(["npm", "start", "--prefix", "src/frontend/"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True) 
 
 
 if __name__ == '__main__':
