@@ -1,7 +1,5 @@
 '''|
 
-# Claude To Do:
-
 # this is a function
 
 
