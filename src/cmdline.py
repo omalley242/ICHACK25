@@ -1,5 +1,6 @@
 #Allow for io processing
 import io
+import sys
 #For creating CLI utils
 import click
 #Glob library for searching for files recursively
@@ -18,16 +19,22 @@ import sqlite3
 #allow for running subprocesses from cmdline
 import subprocess
 
+from signal import *
 
+global django_proc
+global react_proc
+
+def clean(*args):
+    django_proc.kill()
+    react_proc.kill()
+    sys.exit(0)
 
 @click.group()
 def cli():
     pass
 
 #default command
-@cli.command()
-@click.argument('configfile_path')
-def parse(configfile_path: str):
+def parse_func(configfile_path: str):
 
     #Load the config file from the supplied directory
     print(f"Loading Config File from {configfile_path}")
@@ -59,10 +66,9 @@ def parse(configfile_path: str):
     file_parser = FileParser(config)
 
     #Process Worklist iteratively
-    print("Parsing Files")
     database_records = []
     for id, file in enumerate(files_to_parse, start=1):
-        database_records.append((id, file, file_parser.parse(file)))
+        database_records.append((id, file.removeprefix("./").replace("/", "->"), file_parser.parse(file)))
 
 
     print("Saving Database Records")
@@ -74,14 +80,38 @@ def parse(configfile_path: str):
     con.commit()  # Remember to commit the transaction after executing INSERT.
 
 
-#command to start the server
 @cli.command()
-def runserver():
+@click.argument('configfile_path')
+def parse(configfile_path: str):
+    parse_func(configfile_path)
+
+#command to start the server
+def runserver_func():
+
+    print("starting servers")
     # run django database server
     django_proc = subprocess.Popen(["python3", "./src/backend/manage.py", "runserver"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+
     # run react front end server
     react_proc = subprocess.Popen(["npm", "start", "--prefix", "src/frontend/"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True) 
+    
+    django_proc.wait()
+    react_proc.wait()
 
+
+@cli.command()
+def runserver():
+    runserver_func()
+
+@cli.command()
+@click.argument('configfile_path')
+def all(configfile_path: str):
+    for sig in (SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM):
+        signal(sig, clean)
+        
+    parse_func(configfile_path)
+    runserver_func()
 
 if __name__ == '__main__':
     cli()
+

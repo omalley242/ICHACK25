@@ -1,16 +1,21 @@
 '''|
 
-# Example Python Function
-Here we can see a simple python function that checks if one plus one
-is equal to a value of 2 and if so will return True otherwise will return false
+# Claude To Do:
+
+# this is a function
+
 
 |'''
+
+#{
 
 # my random test function
 def random_test_function():
     if 1 + 1 == 2:
         return True
     return False
+
+#}
 
 '''|
 

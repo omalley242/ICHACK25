@@ -20,12 +20,12 @@ from rest_framework.routers import SimpleRouter
 from Anubis.views import markdownView, markdownRestView
 
 router = SimpleRouter()
-router.register(r'markdown', markdownRestView, 'mardown_rest')
+router.register(r'markdown', markdownRestView, 'markdown_rest')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
-        "markdown/", markdownView, name="mardown"
+        "markdown/", markdownView, name="markdown"
     ),
     path('api/', include(router.urls)),
 ]

@@ -1,5 +1,7 @@
 {
     "anubis_enable_token": "*",
+    "code_start_token": "{",
+    "code_end_token": "}",
     "anubisignore": [
         "**venv",
         "__pycache__",
@@ -16,6 +18,7 @@
             "base_comment_pattern": "#",
             "multiline_comment_end": "'''",
             "multiline_comment_start": "'''",
+            "language_name": "python",
             "py/object": "__main__.CommentPattern"
         },
         ".c":
@@ -23,6 +26,7 @@
             "base_comment_pattern": "//",
             "multiline_comment_end": "*/",
             "multiline_comment_start": "/*",
+            "language_name": "c",
             "py/object": "__main__.CommentPattern"
         },
         ".js":
@@ -30,6 +34,7 @@
             "base_comment_pattern": "//",
             "multiline_comment_end": "*/",
             "multiline_comment_start": "/*",
+            "language_name": "javascript",
             "py/object": "__main__.CommentPattern"
         }
     },

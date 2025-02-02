@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import MarkdownContent
 from .serializers import MarkdownContentSerializer
+from django.http import HttpResponse
 
 def markdownView(request):
     markdown_content = MarkdownContent.objects.first()
@@ -29,4 +30,6 @@ class markdownRestView(viewsets.ReadOnlyModelViewSet):
         Returns a list of all the group names that the given
         user belongs to.
         """
-        return Response(sorted([file.file_name for file in self.queryset]))
+        sorted_data = sorted([file.file_name for file in self.queryset])
+        response = HttpResponse(sorted_data)
+        return response

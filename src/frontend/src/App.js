@@ -1,46 +1,127 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaMoon, FaSun } from "react-icons/fa";
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from 'axios'
+import Showdown from "showdown";
+import "./github-markdown.css"
+import "./highlight/styles/default.css"
+import { NavLink } from "react-router-dom";    
 
-function App() {
-  const [darkMode, setDarkMode] = useState(false);
+function Home() {
+  return(
+    <p>Home</p>
+  );
+}
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("bg-dark");
-    document.body.classList.toggle("text-light");
-  };
+
+function FileList()
+{
+  //make query against django db
+  const [posts, setPosts] = useState([]);
+
+  let request_link = "http://localhost:8000/api/markdown/file_names"
+  useEffect(() => {
+    axios.get(request_link)
+      .then(response => {
+        setPosts(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+    
+  let file_elements = []
+  for (const [key, value] of Object.entries(posts)) {
+    file_elements.push(<File path={value}></File>)
+  }
 
   return (
-    <nav className={`navbar navbar-expand-lg ${darkMode ? "navbar-dark bg-dark" : "navbar-light bg-light"}`}>
-      <div className="container">
-        <a className="navbar-brand" href="#">MyApp</a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link" href="#">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Docs</a>
-            </li>
-          </ul>
-          <button className="btn btn-outline-secondary ms-auto" onClick={toggleDarkMode}>
-            {darkMode ? <FaSun /> : <FaMoon />}
-          </button>
-        </div>
-      </div>
-    </nav>
+    <div>{file_elements}</div>
+  );
+}
+
+function File(path) {
+  return (
+    <NavLink to={path}>Products</NavLink>
+  );
+}
+
+function Documentation() {
+  const { file } = useParams();
+
+  //make query against django db
+  const [posts, setPosts] = useState([]);
+
+  let request_link = "http://localhost:8000/api/markdown/"
+  useEffect(() => {
+    axios.get(request_link)
+      .then(response => {
+        setPosts(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  let converter = new Showdown.Converter();
+  let text = posts;
+  let html = [];
+  for (const [key, value] of Object.entries(posts)) {
+    html = html + converter.makeHtml(value.content);
+  }
+
+  const css = `.markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+  }
+
+  @media (max-width: 767px) {
+    .markdown-body {
+      padding: 15px;
+    }
+  }`
+
+  return(
+    <div style={{backgroundColor: "#0d1117"}}>
+    <FileList></FileList>
+    <script src="./highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+      <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+      <style>
+        {css}
+      </style>
+      <article className="markdown-body">
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </article>
+    </div>
+  );
+}
+
+function App() {
+  
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<Home />}
+        />
+        <Route
+          path="/:file"
+          element={<Documentation />}
+        />
+      </Routes>
+    </Router>
   );
 }
 
