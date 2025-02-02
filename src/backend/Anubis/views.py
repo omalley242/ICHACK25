@@ -26,10 +26,6 @@ class markdownRestView(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False)
     def file_names(self, request, pk=None):
-        """
-        Returns a list of all the group names that the given
-        user belongs to.
-        """
         sorted_data = sorted([file.file_name for file in self.queryset])
-        response = HttpResponse(sorted_data)
+        response = Response(sorted_data)
         return response

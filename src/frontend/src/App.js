@@ -26,7 +26,7 @@ function FileList()
   //make query against django db
   const [posts, setPosts] = useState([]);
 
-  let request_link = "http://localhost:8000/api/markdown/file_names"
+  let request_link = "http://localhost:8000/api/markdown/file_names/"
   useEffect(() => {
     axios.get(request_link)
       .then(response => {
