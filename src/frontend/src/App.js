@@ -85,10 +85,9 @@ function Documentation() {
   }, []);
 
   let converter = new Showdown.Converter();
-  let text = posts;
   let html = [];
   for (const [key, value] of Object.entries(posts)) {
-    html = html + converter.makeHtml(value.content);
+    html = html + converter.makeHtml(value);
   }
 
   const css = `.markdown-body {

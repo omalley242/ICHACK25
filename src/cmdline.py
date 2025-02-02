@@ -68,7 +68,7 @@ def parse_func(configfile_path: str):
     #Process Worklist iteratively
     database_records = []
     for id, file in enumerate(files_to_parse, start=1):
-        database_records.append((id, file.removeprefix("./").replace(".", "|").replace("/", "%2F"), file_parser.parse(file)))
+        database_records.append((id, file.removeprefix("./").replace(".", "|").replace("/", "->"), file_parser.parse(file)))
 
 
     print("Saving Database Records")

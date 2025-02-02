@@ -1,12 +1,5 @@
 '''|
-<<<<<<< HEAD
-
-# this is a function
-
-
-=======
 # this is a python function and code documentation generated for it!
->>>>>>> 07fb0c4 (adding stuff)
 |'''
 #{
 
