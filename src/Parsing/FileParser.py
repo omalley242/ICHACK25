@@ -32,7 +32,7 @@ class FileParser():
         self.markdown_state = parsing_state.IGNORE
 
         if self.comment_pattern == None:
-            raise(f"Could not find comment pattern requried for {file_extension} please review the config file")
+            raise(BaseException(f"Could not find comment pattern requried for {file_extension} please review the config file"))
         
         with open(file_path, "r") as data:
             lines = data.readlines()
@@ -50,7 +50,7 @@ class FileParser():
         line_markdown = ""
 
         #iterate over line full
-        while scanning_head_index != len(line):
+        while scanning_head_index != len(line)-1:
 
             #check current state not within comment block
             if self.comment_state == parsing_state.IGNORE:
@@ -109,7 +109,7 @@ class FileParser():
                         self.comment_state = parsing_state.IGNORE
                         self.markdown_state = parsing_state.IGNORE
                         
-                        return line_markdown + line[scanning_head_index:-1] #-1 such that the newline is not included
+                        return line_markdown + line[scanning_head_index:] #-1 such that the newline is not included
                     
                     #If the markdown multi line closes change to ignore
                     elif scanning_head_index < len(line) - markdown_pattern_mutli_len and line[scanning_head_index:scanning_head_index + markdown_pattern_mutli_len] == self.config.anubis_multiline_end_token:
