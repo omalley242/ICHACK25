@@ -1,7 +1,5 @@
 #Allow for io processing
 import io
-#For processing Yaml Files
-import yaml
 #For creating CLI utils
 import click
 #Glob library for searching for files recursively
@@ -9,7 +7,10 @@ from glob import glob
 #tool for matching file paths for anubisignore
 import pathspec
 #Custom Parsing Library
-from Parsing.Config import *
+from Parsing.Config import Config
+from Parsing.FileParser import FileParser
+#enables it to be effectively decoded
+from Parsing.CommentPattern import CommentPattern
 #allow for path manipulation
 import os.path
 
@@ -39,16 +40,25 @@ def parse(configfile_path: str):
     #files to parse worklist
     files_to_parse = []
 
-    for filename in glob(f'{base_dir}/*', recursive=True):
+    #Extract all files
+    for filename in glob(f'{base_dir}/**/*.*', recursive=True):
 
+        #Skip file if within anubisignore
         if ignore_spec.match_file(filename):
             continue
         
+        #Add to worklist
         files_to_parse.append(filename)
 
+    #create a new file parser
+    file_parser = FileParser(config)
 
-    print(files_to_parse)
+    #Process Worklist iteratively
+    extracted_text = []
+    for file in files_to_parse:
+        extracted_text += file_parser.parse(file)
 
+    print("".join(extracted_text))
 
 
 #command to start the server
